@@ -199,7 +199,7 @@ if __name__ == "__main__":
     parser.add_argument('--outcome', '-o', type=str, required=True, help='name of outcome')
     parser.add_argument('--path', '-p', type=str, required=True, help='path of csv data')
     parser.add_argument('--method', '-m', type=str, default='xgb', help='LSF queue to submit the job')
-    parser.add_argument('--binary', '-b', type=str2bool, default='True', help='number of node requested')
+    parser.add_argument('--binary_outcome', '-b', type=str2bool, default='True', help='number of node requested')
 
 
     args = parser.parse_args()
