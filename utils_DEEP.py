@@ -686,7 +686,7 @@ def statistical_assessment_with_confounder(sorted_paths, feature_idx_dict, paths
                                            sign_pair, topk_profile_str, confounders_df,
                                            binary_outcome, y, visualize_dict, test_size, outcome_dir, fmap_fn,
                                            labels, X, possibleDirs, outcome_folder_name, file_prefix,
-                                           outputDir,
+                                           outputDir, p_val_df
                                            ):
     for idx, (profile, profile_occurrence) in enumerate(sorted_paths):
         if profile_occurrence > 10:

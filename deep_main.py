@@ -34,7 +34,7 @@ def runWorkflow(**kargs):
     input_file = kargs.get('input_file', '')
     binary_outcome = kargs.get('binary_outcome', True)
     outcome_folder_name = kargs.get('output_folder_name', '')
-    # p_val_df = kargs.get('p_val_df', pd.DataFrame({}))
+    p_val_df = kargs.get('p_val_df', pd.DataFrame({}))
     test_score_df = kargs.get('test_score_df', pd.DataFrame({}))
     # yr_name = kargs.get('yr_name', '')
     xgb = kargs.get('xgb', False)
@@ -136,7 +136,7 @@ def runWorkflow(**kargs):
     p_val_df = statistical_assessment_with_confounder(sorted_paths, feature_idx_dict, paths_median_threshold,
                                            sign_pair, topk_profile_str, confounders_df,
                                            binary_outcome, y, visualize_dict, test_size,outcome_dir,fmap_fn,
-                                         labels, X, possibleDirs, outcome_folder_name, file_prefix, outputDir)
+                                         labels, X, possibleDirs, outcome_folder_name, file_prefix, outputDir, p_val_df)
 
     print('Finished All regressions!')
 
