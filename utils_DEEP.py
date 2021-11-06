@@ -285,7 +285,8 @@ def load_data(input_path=None, input_file=None,
     assert os.path.isfile(input_path), "Invalid input path: {}".format(input_path)
 
     df = pd.read_csv(input_path, header=0, sep=sep)
-    df.drop(columns=['index'], inplace=True)
+    print(df)
+    # df.drop(columns=['index'], inplace=True)
     df.dropna(axis=0, how='any', inplace=True)
     confounders_df = df[confounding_vars]
     exclude_vars = list(filter(lambda x: x in df.columns, exclude_vars))
