@@ -11,6 +11,7 @@ from sklearn.metrics import fbeta_score, make_scorer, precision_recall_curve, pr
 from xgb_custom_visualizer import *
 from sklearn.tree import DecisionTreeClassifier, DecisionTreeRegressor
 import operator
+import xgboost
 
 inequality_operators = {'<': lambda x, y: x < y,
                         '<=': lambda x, y: x <= y,
