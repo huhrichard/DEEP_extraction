@@ -32,7 +32,9 @@ Due to IRB constraints, we are unable to publicly share the asthma cohort datase
 
 ## Pipeline Summary
 
-In the `deep_main.py` script, it performs the DEEP extraction on single health outcome, including frequent profile extraction via 100 runs of XGBoost and statistical assessment of the frequent profiles with potential confounders. After running DEEP on the multiple health outcomes, `merge_multiple_outcomes.py` merges the results into 1 and performs the FDR correction. 
+In the `deep_main.py` script, it performs the DEEP extraction on single health outcome, including **frequent profile extraction via 100 runs of XGBoost** and **statistical assessment of the frequent profiles with potential confounders**. 
+
+After running DEEP on the multiple health outcomes, `merge_multiple_outcomes.py` merges the results into 1 and performs the FDR correction. 
 
 ## Contact
 In case of issues with the code, please let us know through the Issues functionality and/or contact Yan-Chak Li [yan-chak.li@mssm.edu](mailto:yan-chak.li@mssm.edu) and Gaurav Pandey [gaurav.pandey@mssm.edu](mailto:gaurav.pandey@mssm.edu).
