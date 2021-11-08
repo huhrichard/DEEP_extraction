@@ -28,7 +28,7 @@ Result:
     
 ## Sample Data
 
-Due to IRB constraints, we are unable to publicly share the asthma cohort dataset used in our study. Thus, as sample data to test our code, we are providing a random resampled asthma dataset based on the original data distribution in this repository.
+Due to IRB constraints, we are unable to publicly share the asthma cohort dataset used in our study. Thus, as sample data to test our code, we are providing a randomly resampled asthma dataset based on the original data distribution in this repository.
 
 ## Pipeline Summary
 
