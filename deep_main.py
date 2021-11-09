@@ -195,11 +195,11 @@ def str2bool(v):
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description='Feed some bsub parameters')
-    parser.add_argument('--outcome', '-o', type=str, required=True, help='name of outcome')
-    parser.add_argument('--path', '-p', type=str, required=True, help='path of csv data')
-    parser.add_argument('--method', '-m', type=str, default='xgb', help='LSF queue to submit the job')
-    parser.add_argument('--binary_outcome', '-b', type=str2bool, default='True', help='number of node requested')
+    parser = argparse.ArgumentParser(description='Parameters of DEEP extraction')
+    parser.add_argument('--outcome', '-o', type=str, required=True, help='Name of outcome')
+    parser.add_argument('--filename', '-p', type=str, required=True, help='Path of csv data')
+    parser.add_argument('--method', '-m', type=str, default='xgb', help='Tree method used in DEEP, default = XGBoost')
+    parser.add_argument('--binary_outcome', '-b', type=str2bool, default='True', help='True if the outcome is labeled in binary')
 
 
     args = parser.parse_args()
@@ -247,5 +247,5 @@ if __name__ == "__main__":
                                            )
 
     pvalue_df.dropna(axis=0, how='any', inplace=True)
-    pvalue_df.to_csv('fdr_{}_{}.csv'.format(outcome, analyze_method), index=False, header=True)
-    pred_score_df.to_csv('pred_score_{}_{}.csv'.format(outcome, analyze_method), index=False, header=True)
+    pvalue_df.to_csv(os.path.join(plot_predir, 'fdr_{}_{}.csv'.format(outcome, analyze_method)), index=False, header=True)
+    pred_score_df.to_csv(os.path.join(plot_predir, 'pred_score_{}_{}.csv'.format(outcome, analyze_method)), index=False, header=True)
