@@ -237,7 +237,7 @@ if __name__ == "__main__":
                                           'num_patients'
                                           ])
 
-    file = args.path
+    file = args.filename
     pvalue_df, pred_score_df = runWorkflow(input_file=file,
                                            binary_outcome=binary_out,
                                            output_folder_name=outcome,
