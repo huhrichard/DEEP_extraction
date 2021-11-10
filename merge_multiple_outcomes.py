@@ -23,21 +23,16 @@ if __name__ == "__main__":
     args = parser.parse_args()
     result_dir = args.result_dir
 
-    # outcome_binary_dict = {
-    #     'daily_controller_past6months': True,
-    #     'emergency_dept': True,
-    #     'hospitalize_overnight': True,
-    # }
     fdr_file_list = find('fdr*.csv', result_dir)
 
     p_val_list = []
     pred_score_list = []
     for fdr_file in fdr_file_list:
-        p_val_list.append(pd.read_csv(fdr_file))
+        p_val_list.append(pd.read_csv(os.path.join(result_dir,fdr_file)))
 
     pred_file_list = find('pred_score*.csv', result_dir)
     for pred_file in pred_file_list:
-        pred_score_list.append(pd.read_csv(pred_file))
+        pred_score_list.append(pd.read_csv(os.path.join(result_dir,pred_file)))
 
     pvalue_df_cat = pd.concat(p_val_list, ignore_index=True)
     pred_score_df_cat = pd.concat(pred_score_list, ignore_index=True)
