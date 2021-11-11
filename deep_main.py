@@ -200,7 +200,7 @@ if __name__ == "__main__":
     parser.add_argument('--filename', '-p', type=str, required=True, help='Path of csv data')
     parser.add_argument('--method', '-m', type=str, default='xgb', help='Tree method used in DEEP, default = XGBoost')
     parser.add_argument('--binary_outcome', '-b', type=str2bool, default='True', help='True if the outcome is labeled in binary')
-    parser.add_argument('--result_dir', '-rd', type=str, default='./result_', help='True if the outcome is labeled in binary')
+    parser.add_argument('--result_dir', '-r', type=str, default='./result_', help='True if the outcome is labeled in binary')
 
 
     args = parser.parse_args()
@@ -210,7 +210,7 @@ if __name__ == "__main__":
         xgb_predict = True
     else:
         xgb_predict = False
-    plot_predir = '{}{}'.format(args.rd, analyze_method)
+    plot_predir = '{}{}'.format(args.result_dir, analyze_method)
     if not os.path.exists(plot_predir):
         os.mkdir(plot_predir)
 
