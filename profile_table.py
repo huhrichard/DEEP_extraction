@@ -68,7 +68,7 @@ def summarize_plot(result_dir='', pollutant_suffix='', method_suffix=''):
 
 
 
-    fdr_path = '{}/merged_fdr.csv'.format(result_dir)
+    fdr_path = os.path.join(result_dir, 'merged_fdr.csv')
     fdr_df = pd.read_csv(fdr_path, sep=',')
 
     fdr_df = fdr_df.loc[fdr_df['fdr'] < 0.05]
@@ -99,12 +99,12 @@ def summarize_plot(result_dir='', pollutant_suffix='', method_suffix=''):
         fdr_df_cat['se'] = np.abs((fdr_df_cat['mean'] - fdr_df_cat['coef_95CI_lower']))/1.96
         fdr_df_cat['mean'] = np.abs(fdr_df_cat['mean'])
 
-        fdr_df_cat.sort_values(by=['out', 'mean'],
+        fdr_df_cat.sort_values(by=['outcome', 'mean'],
                                              ascending=[True, False],
                                              inplace=True)
         fdr_df_cat.reset_index(inplace=True)
         fdr_df_cat['Modelnum'] = fdr_df_cat.index
-        fdr_df_cat = fdr_df_cat[['Modelnum', 'mean', 'se', 'freq', 'fdr', 'out', 'profile']]
+        fdr_df_cat = fdr_df_cat[['Modelnum', 'mean', 'se', 'freq', 'fdr', 'outcome', 'profile']]
         fdr_df_cat['pol1'] = np.nan
         fdr_df_cat['fdr_str'] = ''
         for row_idx, pollutant_row in fdr_df_cat.iterrows():
