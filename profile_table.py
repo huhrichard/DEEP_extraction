@@ -70,6 +70,7 @@ def summarize_plot(result_dir='', pollutant_suffix='', method_suffix=''):
 
     fdr_path = os.path.join(result_dir, 'merged_fdr.csv')
     fdr_df = pd.read_csv(fdr_path, sep=',')
+    print(fdr_df)
 
     fdr_df = fdr_df.loc[fdr_df['fdr'] < 0.05]
     fdr_df = fdr_df.loc[fdr_df['relation'] == 'pos_correlate']
