@@ -73,7 +73,7 @@ def summarize_plot(result_dir='', pollutant_suffix='', method_suffix=''):
     print(fdr_df)
 
     fdr_df = fdr_df.loc[fdr_df['fdr'] < 0.05]
-    fdr_df = fdr_df.loc[fdr_df['relation'] == 'pos_correlate']
+    # fdr_df = fdr_df.loc[fdr_df['relation'] == 'pos_correlate']
     print(fdr_df)
 
     # fdr_df['profile'] = fdr_df['profile'].str.replace(pollutant_suffix, '', regex=False)
