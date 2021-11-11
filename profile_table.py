@@ -64,7 +64,7 @@ relation_inv_dict = {v: k for k, v in relation_dict.items()}
 
 
 def summarize_plot(result_dir='', pollutant_suffix='', method_suffix=''):
-    print(pollutant_suffix)
+    # print(pollutant_suffix)
 
 
 
@@ -73,12 +73,14 @@ def summarize_plot(result_dir='', pollutant_suffix='', method_suffix=''):
 
     fdr_df = fdr_df.loc[fdr_df['fdr'] < 0.05]
     fdr_df = fdr_df.loc[fdr_df['relation'] == 'pos_correlate']
+    print(fdr_df)
 
-    fdr_df['profile'] = fdr_df['profile'].str.replace(pollutant_suffix, '', regex=False)
+    # fdr_df['profile'] = fdr_df['profile'].str.replace(pollutant_suffix, '', regex=False)
 
     profile_str = fdr_df['profile'].str
-    print((profile_str.count('>') > 1) & (profile_str.count('<') == 0))
     print(profile_str)
+    print((profile_str.count('>') > 1) & (profile_str.count('<') == 0))
+    # print(profile_str)
 
     fdr_df['all_greater'] = (profile_str.count('>') > 1) & (profile_str.count('<') == 0)
     fdr_df['all_less'] = (profile_str.count('<') > 1) & (profile_str.count('>') == 0)
