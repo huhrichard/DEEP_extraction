@@ -3,9 +3,12 @@ import os
 
 suffix = sys.argv[-1]
 outcome_binary_dict = {
-    'resampled_daily_controller_past6months': True,
-    'resampled_emergency_dept': True,
-    'resampled_hospitalize_overnight': True,
+    # 'resampled_daily_controller_past6months': True,
+    # 'resampled_emergency_dept': True,
+    # 'resampled_hospitalize_overnight': True,
+    'daily_controller_past6months': True,
+    'emergency_dept': True,
+    'hospitalize_overnight': True,
 }
 
 for outcome in outcome_binary_dict:
