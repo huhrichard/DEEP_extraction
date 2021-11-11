@@ -16,7 +16,7 @@ for outcome in outcome_binary_dict:
               "#BSUB -n 4\n#BSUB -W 2:00\n#BSUB -o analyzer_%J.stdout\n#BSUB -eo analyzer_%J.stderr\n" \
               "#BSUB -R rusage[mem=10000]\nmodule purge\n"
     outcome_replaced = outcome.replace('(', '\(').replace(')', '\)')
-    python_cmd = "python deep_main.py --filename {}.csv --outcome {}".format(outcome, outcome)
+    python_cmd = "python deep_main.py --filename {}.csv --outcome {} -rd".format(outcome, outcome, 'paper_result_')
 
     lsf_name = "{}.lsf".format(outcome)
     lsf_replaced_name = "{}.lsf".format(outcome_replaced)
