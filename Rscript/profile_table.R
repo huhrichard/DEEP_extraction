@@ -1192,8 +1192,8 @@ fig2_df <- data.frame(
 colnames(fig2_df) <- gsub("\\.", " ", colnames(fig2_df))
 
 fig2 <- viz_forest_custom(x = main[, c("mean", "se")],x_trans_function = exp,x_limit =c(-0.5,2.2) ,
-                        group=main[,"out"],
-                        study_labels=main[,"out"],  col = "Greys",
+                        group=main[,"outcome"],
+                        study_labels=main[,"outcome"],  col = "Greys",
                         x_breaks = c(0,0.693147,1.386294, 2.0794415), text_size = 2.3,
                         annotate_CI = TRUE,
                         xlab="OR",
@@ -1223,8 +1223,8 @@ colnames(fig3_df) <- gsub("\\.", " ", colnames(fig3_df))
 
 
 fig3 <- viz_forest_custom(x = main[, c("mean", "se")],x_trans_function = exp,x_limit =c(-0.5,2.2) ,
-                        group=main[,"out"],
-                        study_labels=main[,"out"], x_breaks = c(0,0.693147,1.386294, 2.0794415), col = "Greys",  text_size = 2.28,
+                        group=main[,"outcome"],
+                        study_labels=main[,"outcome"], x_breaks = c(0,0.693147,1.386294, 2.0794415), col = "Greys",  text_size = 2.28,
                         annotate_CI = TRUE,xlab="OR",
                         study_table = fig3_df,
                         FDR = main$fdr,
