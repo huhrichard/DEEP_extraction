@@ -194,7 +194,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Parameters of DEEP extraction')
     parser.add_argument('--outcome', '-o', type=str, required=True, help='Name of outcome')
     parser.add_argument('--filename', '-p', type=str, required=True, help='Path of csv data')
-    parser.add_argument('--binary_outcome', '-b', type=str2bool, default='True', help='True if the outcome is labeled in binary')
+    parser.add_argument('--binary_outcome', '-b', type=str2bool, default='True', help='True if the outcome is labeled in binary, default=True')
     parser.add_argument('--result_dir', '-r', type=str, default='./result', help='desired result directory prefix, default="./result" ')
     parser.add_argument('--num_tree_print', '-ntp', type=int, default=-1,
                         help='Number of trees for each path printed to result directory, default = -1 implies printing all of them')
