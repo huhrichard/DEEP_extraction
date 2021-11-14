@@ -5,7 +5,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 from sklearn.tree import export_graphviz
-from sklearn.externals.six import StringIO
+from six import StringIO
 import pydotplus
 
 def check_dir(target_dir):
