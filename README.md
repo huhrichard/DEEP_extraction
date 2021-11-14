@@ -21,6 +21,25 @@ In addition to generate the figure used in our paper, the following R packages a
     metaviz=0.3.1
 
 ## Usage
+
+    Parameters of DEEP extraction
+
+    optional arguments:
+      -h, --help            show this help message and exit
+      --outcome OUTCOME, -o OUTCOME
+                            Name of outcome
+      --filename FILENAME, -p FILENAME
+                            Path of csv data
+      --method METHOD, -m METHOD
+                            Tree method used in DEEP, default = XGBoost
+      --binary_outcome BINARY_OUTCOME, -b BINARY_OUTCOME
+                            True if the outcome is labeled in binary
+      --result_dir RESULT_DIR, -r RESULT_DIR
+                            desired result directory prefix
+      --num_tree_print NUM_TREE_PRINT, -ntp NUM_TREE_PRINT
+                            Number of trees for each path printed to result
+                            directory, default = -1 implies printing all of them
+    
 Step 1: Applying DEEP to the desired outcome(s).
     
     python deep_main.py --filename [outcome.csv] --outcome [outcome]
@@ -28,6 +47,10 @@ Step 1: Applying DEEP to the desired outcome(s).
 Step 2: Merging all the result files from multiple outcomes, and then performing the FDR correction
 
     python merge_multiple_outcomes.py --result_dir [result_directory]
+    
+Printing Figure 2 & 3 (Table of False discovery rate (FDR), Odds ratios (OR) of individual pollutants and combinations which are significantly associated to the outcomes):
+
+    python profile_table.py --result_dir [result_directory]
     
 Result:
     
