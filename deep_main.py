@@ -38,6 +38,7 @@ def runWorkflow(**kargs):
     test_score_df = kargs.get('test_score_df', pd.DataFrame({}))
     # yr_name = kargs.get('yr_name', '')
     xgb = kargs.get('xgb', False)
+    num_tree_print = kargs.get('num_tree_print', -1)
     # outcome_name = kargs.get('outcome_name', pd.DataFrame({}))
 
     outputDir = os.path.join(plotDir, outcome_folder_name)
@@ -136,7 +137,7 @@ def runWorkflow(**kargs):
     p_val_df = statistical_assessment_with_confounder(sorted_paths, feature_idx_dict, paths_median_threshold,
                                            sign_pair, topk_profile_str, confounders_df,
                                            binary_outcome, y, visualize_dict, test_size,outcome_dir,fmap_fn,
-                                         labels, X, possibleDirs, outcome_folder_name, file_prefix, outputDir, p_val_df)
+                                         labels, X, possibleDirs, outcome_folder_name, file_prefix, outputDir, p_val_df, num_tree_print)
 
     print('Finished All regressions!')
 
@@ -201,11 +202,14 @@ if __name__ == "__main__":
     parser.add_argument('--method', '-m', type=str, default='xgb', help='Tree method used in DEEP, default = XGBoost')
     parser.add_argument('--binary_outcome', '-b', type=str2bool, default='True', help='True if the outcome is labeled in binary')
     parser.add_argument('--result_dir', '-r', type=str, default='./result_', help='desired result directory prefix')
+    parser.add_argument('--num_tree_print', '-ntp', type=int, default=-1,
+                        help='Number of trees for each path printed to result directory, default = -1 implies printing all of them')
 
 
     args = parser.parse_args()
     outcome = args.outcome
     analyze_method = args.method
+    ntp = args.num_tree_print
     if 'xgb' in analyze_method:
         xgb_predict = True
     else:
@@ -244,7 +248,8 @@ if __name__ == "__main__":
                                            output_folder_name=outcome,
                                            p_val_df=pvalue_df,
                                            test_score_df=pred_score_df,
-                                           xgb=xgb_predict
+                                           xgb=xgb_predict,
+                                           num_tree_print=ntp
                                            )
 
     pvalue_df.dropna(axis=0, how='any', inplace=True)

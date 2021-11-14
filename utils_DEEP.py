@@ -12,6 +12,7 @@ from xgb_custom_visualizer import *
 from sklearn.tree import DecisionTreeClassifier, DecisionTreeRegressor
 import operator
 import xgboost
+import random
 
 inequality_operators = {'<': lambda x, y: x < y,
                         '<=': lambda x, y: x <= y,
@@ -572,7 +573,7 @@ def topk_profile_with_its_threshold(sorted_paths, paths_thres, topk, sep="\t"):
 
 
 def draw_xgb_tree(test_size, split_idx, tree_dir,
-                  visualize_dict, outcome_dir, fmap_fn, booster_idx, labels, count, X, y):
+                  visualize_dict, outcome_dir, fmap_fn, booster_idx, labels, X, y):
     from utils_DEEP import visualize, visualize_xgb
 
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_size,
@@ -583,7 +584,7 @@ def draw_xgb_tree(test_size, split_idx, tree_dir,
                           labels=labels,
                           outcome_name=outcome_dir,
                           num_trees=booster_idx,
-                          file_name="count_{}_split_{}_booster_{}".format(count, split_idx, booster_idx),
+                          file_name="xgb{}_subtree{}".format(split_idx, booster_idx),
                           training_data=(X_train, y_train),
                           tree_dir=tree_dir)
 
@@ -686,7 +687,7 @@ def statistical_assessment_with_confounder(sorted_paths, feature_idx_dict, paths
                                            sign_pair, topk_profile_str, confounders_df,
                                            binary_outcome, y, visualize_dict, test_size, outcome_dir, fmap_fn,
                                            labels, X, possibleDirs, outcome_folder_name, file_prefix,
-                                           outputDir, p_val_df
+                                           outputDir, p_val_df, num_tree_print
                                            ):
     for idx, (profile, profile_occurrence) in enumerate(sorted_paths):
         if profile_occurrence > 10:
@@ -819,17 +820,23 @@ def statistical_assessment_with_confounder(sorted_paths, feature_idx_dict, paths
                 draw_false = False
                 if (profile_group == 'all_greater') or (profile_group == 'single_pollutant'):
                     # table_count = table_count + 1
+                    profile_printed = 0
+                    import random
+                    if num_tree_print == -1:
+                        tree_to_print = range(len(path_from))
+                    else:
+                        tree_to_print = random.sample(range(len(path_from)), num_tree_print)
                     for path_idx, path_loc in enumerate(path_from):
                         # print('printing XGB Trees')
-                        split_idx, booster_idx = path_loc
-                        tree_dir = os.path.join(outputDir, p_name)
-                        if not os.path.exists(tree_dir):
-                            os.mkdir(tree_dir)
-                        regression_x_df.to_csv(os.path.join(outputDir, '{}.csv'.format(p_name)))
+                        if path_idx in tree_to_print:
+                            split_idx, booster_idx = path_loc
+                            tree_dir = os.path.join(outputDir, p_name)
+                            if not os.path.exists(tree_dir):
+                                os.mkdir(tree_dir)
+                            regression_x_df.to_csv(os.path.join(outputDir, '{}.csv'.format(p_name)))
 
-                        draw_xgb_tree(test_size, split_idx, tree_dir,
-                                      visualize_dict, outcome_dir, fmap_fn, booster_idx, labels, X=X, y=y,
-                                      count=0)
+                            draw_xgb_tree(test_size, split_idx, tree_dir,
+                                          visualize_dict, outcome_dir, fmap_fn, booster_idx, labels, X=X, y=y)
 
 
             if (sign_pair[0] in topk_profile_str[idx] and sign_pair[1] in topk_profile_str[
