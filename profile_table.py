@@ -128,7 +128,7 @@ def summarize_plot(result_dir='', pollutant_suffix='', method_suffix=''):
         fdr_df_cat['out_first_only'] = np.nan
         outcome_unique = fdr_df_cat['outcome'].unique()
         for u_out in outcome_unique:
-            first_idx = fdr_df_cat[fdr_df_cat['out'] == u_out].first_valid_index()
+            first_idx = fdr_df_cat[fdr_df_cat['outcome'] == u_out].first_valid_index()
             fdr_df_cat.loc[first_idx, 'out_first_only'] = u_out
         fdr_df_cat.to_csv('{}/r_summary_{}.csv'.format(result_dir, profile_cat))
 
