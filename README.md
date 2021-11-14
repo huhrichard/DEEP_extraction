@@ -30,12 +30,10 @@ In addition to generate the figure used in our paper, the following R packages a
                             Name of outcome
       --filename FILENAME, -p FILENAME
                             Path of csv data
-      --method METHOD, -m METHOD
-                            Tree method used in DEEP, default = XGBoost
       --binary_outcome BINARY_OUTCOME, -b BINARY_OUTCOME
-                            True if the outcome is labeled in binary
+                            True if the outcome is labeled in binary, default=True
       --result_dir RESULT_DIR, -r RESULT_DIR
-                            desired result directory prefix
+                            desired result directory prefix, default="./result"
       --num_tree_print NUM_TREE_PRINT, -ntp NUM_TREE_PRINT
                             Number of trees for each path printed to result
                             directory, default = -1 implies printing all of them
@@ -44,23 +42,39 @@ Step 1: Applying DEEP to the desired outcome(s).
     
     python deep_main.py --filename [outcome.csv] --outcome [outcome]
     
+For example:
+
+    python deep_main.py --filename DailyControllerMedication.csv --outcome DailyControllerMedication
+    
 Step 2: Merging all the result files from multiple outcomes, and then performing the FDR correction
 
     python merge_multiple_outcomes.py --result_dir [result_directory]
+    
+For example:
+    
+    python merge_multiple_outcomes.py --result_dir ./result
     
 Printing Figure 2 & 3 (Table of False discovery rate (FDR), Odds ratios (OR) of individual pollutants and combinations which are significantly associated to the outcomes):
 
     python profile_table.py --result_dir [result_directory]
     
+For example:
+    
+    python profile_table.py --result_dir ./result
+    
+    
+    
 Result:
     
 ## Sample Data
 
-Due to IRB constraints, we are unable to publicly share the asthma cohort dataset used in our study. Thus, as sample data to test our code, we are providing a randomly resampled asthma dataset based on the original data distribution in this repository.
+Due to IRB constraints, we are unable to publicly share the asthma cohort dataset used in our study. Thus, as sample data to test our code, we are providing a randomized dataset based on the original data distribution in this repository.
 
 ## Pipeline Summary
 
-In the `deep_main.py` script, it performs the DEEP extraction on single health outcome, including **frequent profile extraction via 100 runs of XGBoost** and **statistical assessment of the frequent profiles with potential confounders**. 
+In the `deep_main.py` script, it performs the DEEP extraction on single health outcome, including: 
+* Frequent profile extraction via 100 runs of XGBoost
+* Statistical assessment of the frequent profiles with potential confounders. 
 
 After running DEEP on the multiple health outcomes, `merge_multiple_outcomes.py` merges the results into 1 and performs the FDR correction. 
 
