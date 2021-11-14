@@ -15,7 +15,7 @@ DEEP uses XGBoost algorithm to identify air toxic combinations associated with h
     pydotplus==2.0.2
     argparse==1.1
 
-In addition to generate the figure used in our paper, the following R library have to be installed in R:
+In addition to generate the figure used in our paper, the following R packages are required:
     
     sas7bdat=0.5
     metaviz=0.3.1
