@@ -411,7 +411,7 @@ def classify(X, y, params={}, random_state=0, binary_outcome=True,
             params_list.append(params_dict)
 
         if len(ccp_alphas) <= 1:
-            print('Only 0/1 ccp_alpha value')
+            # print('Only 0/1 ccp_alpha value')
             return model
         else:
             final_tree = GridSearchCV(estimator=model, param_grid=params_list, cv=cv_split,
@@ -629,8 +629,8 @@ def profile_indicator_function(path, feature_idx, path_threshold, X, sign_pair, 
 
             if append_bool:
                 conditions_set.append(pollutant_by_order)
-                print(stacked_pollutant[-1])
-                print(conditions_set[-1])
+                # print(stacked_pollutant[-1])
+                # print(conditions_set[-1])
                 joined_str = '_and_'.join(pollutant_by_order)
                 pe_array = np.ones((X.shape[0]))
                 subpop_array = np.ones((X.shape[0]))
@@ -644,7 +644,7 @@ def profile_indicator_function(path, feature_idx, path_threshold, X, sign_pair, 
                 diff = 1
                 for element in pollutant_by_order:
                     diff = min([sum(p_df[element].values - pe_array), diff])
-                    print(joined_str, element, ' diff: ', diff)
+                    # print(joined_str, element, ' diff: ', diff)
                     if diff == 0:
                         completely_same.append([joined_str, element])
 
@@ -663,8 +663,8 @@ def profile_indicator_function(path, feature_idx, path_threshold, X, sign_pair, 
     profile_indicator = 2 * profile_indicator - 1
     p_df = 2 * p_df - 1
 
-    print(p_df)
-    print(interactions_df)
+    # print(p_df)
+    # print(interactions_df)
 
     return {'comb': profile_indicator,
             'pollutants_df': p_df,
@@ -697,7 +697,7 @@ def statistical_assessment_with_confounder(sorted_paths, feature_idx_dict, paths
                                                       X=X, sign_pair=sign_pair
                                                       )
             binary_profile = np.array(profile_dict['comb'])
-            print(profile, ' pos_count :', sum(binary_profile == 1), 'out of ', binary_profile.shape[0])
+            # print(profile, ' pos_count :', sum(binary_profile == 1), 'out of ', binary_profile.shape[0])
             profile_df = pd.DataFrame({topk_profile_str[idx]: binary_profile})
             regression_x_df = pd.concat([profile_df, confounders_df], axis=1)
 
@@ -733,14 +733,14 @@ def statistical_assessment_with_confounder(sorted_paths, feature_idx_dict, paths
                 conditions = condition_df.columns
                 for i_idx, interaction in enumerate(interactions):
                     condition = conditions[i_idx]
-                    print(condition, interaction)
+                    # print(condition, interaction)
                     skip_bool = False
                     for identical in identical_to_single:
                         if interaction == identical[0]:
                             skip_bool = True
                     if skip_bool == False:
                         condition_p = list(profile_dict['conditions_set'][i_idx])
-                        print(condition_p)
+                        # print(condition_p)
 
                         regression_pollutants_df = pd.concat([interactions_df[[interaction]],
                                                               profile_dict['pollutants_df'][condition_p],
@@ -748,7 +748,7 @@ def statistical_assessment_with_confounder(sorted_paths, feature_idx_dict, paths
 
                         regression_p_df_drop = regression_pollutants_df.drop(all_equal_drop_col, axis=1)
                         cond_bool = condition_df[condition] > 0
-                        print(cond_bool)
+                        # print(cond_bool)
                         regression_p_df_drop = regression_p_df_drop.loc[cond_bool]
                         y_cond = y[cond_bool.values]
 
