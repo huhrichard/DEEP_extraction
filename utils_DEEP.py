@@ -124,7 +124,7 @@ def count_paths_with_thres_sign_from_xgb(estimator,
             node_id = stack.pop()
             split_detail = b0_node_dict[node_id]
             split_dict = extract_split_ft_threshold_next_node(split_detail, xgb_ft_to_real_ft)
-            if split_dict is None:
+            if 'leaf' in split_dict:
                 is_leaves[node_id] = True
             else:
 
@@ -824,7 +824,7 @@ def statistical_assessment_with_confounder(sorted_paths, feature_idx_dict, paths
                     if num_tree_print == -1:
                         tree_to_print = range(len(path_from))
                     else:
-                        tree_to_print = random.sample(range(len(path_from)), num_tree_print)
+                        tree_to_print = random.Random(64).sample(range(len(path_from)), num_tree_print)
                     for path_idx, path_loc in enumerate(path_from):
                         # print('printing XGB Trees')
                         if path_idx in tree_to_print:

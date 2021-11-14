@@ -17,7 +17,7 @@ def check_dir(target_dir):
 
 def extract_split_ft_threshold_next_node(val, xgb_ft_real_dict=None, yes='yes', no='no'):
     if 'leaf' in val:
-        return None
+        return {'leaf':val.split('leaf=')[1]}
     else:
         node_rule = val.split('[')[1].split(']')[0]
         xgb_ft = node_rule.split('<')[0]
@@ -92,10 +92,18 @@ def extract_booster_label_to_dict(booster_in_text, x_train, y_train, feature_idx
         split_detail = b_node_dict[node_id]
         split_dict = extract_split_ft_threshold_next_node(split_detail)
         new_node_rule = ''
-        if split_dict is None:
+        if 'leaf' in split_dict:
+            leaf_string = split_dict['leaf']
+            new_leaf_string = ''
+            if float(leaf_string) > 0:
+                new_leaf_string = 'positive outcome'
+            else:
+                new_leaf_string = 'negative outcome'
 
             key_replace = split_detail
-            # print(key_replace)
+            new_node_rule = split_detail.replace(leaf_string, new_leaf_string)
+
+            print(key_replace)
         else:
             yes_feat_with_sign, yes_node = split_dict['yes']
             no_feat_with_sign, no_node = split_dict['no']
@@ -131,6 +139,7 @@ def extract_booster_label_to_dict(booster_in_text, x_train, y_train, feature_idx
                                       }
             stack.append(yes_node)
             stack.append(no_node)
+
         if new_node_rule == '':
             replace_string = key_replace
         else:
@@ -212,6 +221,7 @@ def to_graphviz_custom(booster, training_data, outcome_name, fmap='', num_trees=
                                                        feature_idx_inv_dict=fmap_dict)
     for k, v in label_replace_dict.items():
         tree_dot = tree_dot.replace(k, v)
+    tree_dot = tree_dot.replace(', missing', '')
     tree_dot = tree_dot.replace(', missing', '')
     tree_dot = tree_dot.replace('graph [ rankdir=TB ]',
                                 'graph [rankdir=TB, label="{}", labelloc=t, fontsize=30]'.format(
