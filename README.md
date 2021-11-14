@@ -51,10 +51,15 @@ Printing Figure 2 & 3 (Table of False discovery rate (FDR), Odds ratios (OR) of 
 
     python profile_table.py --result_dir [result_directory]
     
-For example:
-    
+
+
+Taking the sample data as example, the whole pipeline will be:
+
+    python deep_main.py --filename DailyControllerMedication.csv --outcome DailyControllerMedication
+    python deep_main.py --filename EmergencyRoomVisit.csv --outcome EmergencyRoomVisit
+    python deep_main.py --filename OvernightHospitalization.csv --outcome OvernightHospitalization
+    python merge_multiple_outcomes.py --result_dir ./result
     python profile_table.py --result_dir ./result
-    
     
     
 Result:
