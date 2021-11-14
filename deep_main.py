@@ -108,12 +108,7 @@ def runWorkflow(**kargs):
 
     fmap_fn = features_to_txt(features)
     scores, list_params, topk_profile_str, sorted_paths, paths_median_threshold, visualize_dict = \
-        analyze_path(X, y, model=model, p_grid=p_grid, feature_set=features, n_trials=100, n_trials_ms=30,
-                     save=False,
-                     merge_labels=False,
-                     policy_count='standard',
-                     experiment_id=file_prefix,
-                     create_dir=True, index=0, validate_tree=False, to_str=True, verbose=False,
+        analyze_path(X, y, model=model, p_grid=p_grid, feature_set=features, n_trials=100, verbose=False,
                      binary_outcome=binary_outcome,
                      fmap_fn=fmap_fn,
                      plot_dir=plotDir,
@@ -199,7 +194,6 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Parameters of DEEP extraction')
     parser.add_argument('--outcome', '-o', type=str, required=True, help='Name of outcome')
     parser.add_argument('--filename', '-p', type=str, required=True, help='Path of csv data')
-    parser.add_argument('--method', '-m', type=str, default='xgb', help='Tree method used in DEEP, default = XGBoost')
     parser.add_argument('--binary_outcome', '-b', type=str2bool, default='True', help='True if the outcome is labeled in binary')
     parser.add_argument('--result_dir', '-r', type=str, default='./result_', help='desired result directory prefix')
     parser.add_argument('--num_tree_print', '-ntp', type=int, default=-1,
@@ -208,7 +202,7 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
     outcome = args.outcome
-    analyze_method = args.method
+    analyze_method = 'xgb'
     ntp = args.num_tree_print
     if 'xgb' in analyze_method:
         xgb_predict = True

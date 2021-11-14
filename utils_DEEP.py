@@ -821,7 +821,6 @@ def statistical_assessment_with_confounder(sorted_paths, feature_idx_dict, paths
                 if (profile_group == 'all_greater') or (profile_group == 'single_pollutant'):
                     # table_count = table_count + 1
                     profile_printed = 0
-                    import random
                     if num_tree_print == -1:
                         tree_to_print = range(len(path_from))
                     else:
