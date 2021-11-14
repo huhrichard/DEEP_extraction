@@ -1213,7 +1213,7 @@ fig2 <- viz_forest_custom(x = main[, c("mean", "se")],x_trans_function = exp,x_l
                         FDR = main$fdr,
                         type = "study_only",
                         table_layout = matrix(c(1,1,1,1, 2, 2, 3,3), nrow = 1))
-pdf(paste(result_dir, "fig2.pdf", sep='/'),width=7,height=5)
+pdf(paste(result_dir, "fig2_individual_airtoxic.pdf", sep='/'),width=7,height=5)
 
 print(fig2)
 # k2
@@ -1244,7 +1244,7 @@ fig3 <- viz_forest_custom(x = main[, c("mean", "se")],x_trans_function = exp,x_l
                         type = "study_only",
                         table_layout = matrix(c(1,1,1,1,1, 2, 2, 3,3), nrow = 1)) + geom_point()
 
-pdf(paste(result_dir, "fig3.pdf", sep='/'),width=7,height=5)
+pdf(paste(result_dir, "fig3_combination_airtoxic.pdf", sep='/'),width=7,height=5)
 ##w16 H10
 print(fig3)
 dev.off()
