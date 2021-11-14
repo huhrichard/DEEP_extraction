@@ -79,8 +79,8 @@ Due to IRB constraints, we are unable to publicly share the asthma cohort datase
 ## Pipeline Summary
 
 * In the `deep_main.py` script, it performs the DEEP extraction on single health outcome, including: 
-** Frequent profile extraction via 100 runs of XGBoost
-** Statistical assessment of the frequent profiles with potential confounders. 
+  * Frequent profile extraction via 100 runs of XGBoost
+  * Statistical assessment of the frequent profiles with potential confounders. 
 
 * After running DEEP on the multiple health outcomes, `merge_multiple_outcomes.py` merges the results into 1 and performs the FDR correction. 
 * `profile_table.py` filters out the individual air toxic and combination of air toxic which are positively associated with the health outcome. `profile_table.py` also calls `Rscript\profile_table.R` to visualize the result, as the figure 2 and 3 in our article.
