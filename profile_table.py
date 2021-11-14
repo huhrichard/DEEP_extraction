@@ -125,7 +125,16 @@ def summarize_plot(result_dir='', pollutant_suffix='', method_suffix=''):
                 fdr_df_cat.loc[row_idx, 'fdr_str'] = '<0.01'
         fdr_df_cat.drop(columns=['fdr'], inplace=True)
         fdr_df_cat.rename(columns={'fdr_str': 'fdr'}, inplace=True)
+        fdr_df_cat['out_first_only'] = np.nan
+        outcome_unique = fdr_df_cat['outcome'].unique
+        for u_out in outcome_unique:
+            first_idx = fdr_df_cat[fdr_df_cat['out'] == u_out].first_valid_index()
+            fdr_df_cat.loc[first_idx, 'out_first_only'] = u_out
         fdr_df_cat.to_csv('{}/r_summary_{}.csv'.format(result_dir, profile_cat))
+
+        r_cmd = "R CMD BATCH --no-save --no-restore '--args result_dir=\"{}\"' Rscript/profile_table.R".format(result_dir)
+        os.system(r_cmd)
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Parameters of DEEP extraction')

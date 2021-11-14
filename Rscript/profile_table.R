@@ -1182,7 +1182,19 @@ library(ggplot2)
 cex <- 0.1
 par(cex.lab=cex, cex.axis=cex, cex.main=cex)
 
-main <- read.csv ("r_summary_single_pollutant.csv", header = TRUE)
+args=(commandArgs(TRUE))
+
+if(length(args)==0){
+    print("No arguments supplied.")
+    ##supply default values
+    result_dir = "result_xgb/"
+}else{
+    for(i in 1:length(args)){
+        eval(parse(text=args[[i]]))
+    }
+}
+
+main <- read.csv(paste(result_dir,"r_summary_individual_pollutant.csv",sep="/"), header = TRUE)
 # dev.off()
 # graphics.off()
 fig2_df <- data.frame(
@@ -1201,13 +1213,13 @@ fig2 <- viz_forest_custom(x = main[, c("mean", "se")],x_trans_function = exp,x_l
                         FDR = main$fdr,
                         type = "study_only",
                         table_layout = matrix(c(1,1,1,1, 2, 2, 3,3), nrow = 1))
-pdf("20210909_Fig2_with_sample_num.pdf",width=7,height=5)
+pdf(paste(result_dir, "fig2.pdf", sep='/'),width=7,height=5)
 
 print(fig2)
 # k2
 dev.off()
 
-main <- read.csv ("r_summary_all_greater.csv", header = TRUE)
+main <- read.csv (paste(result_dir,"r_summary_all_greater_combination.csv",sep="/"), header = TRUE)
 main[main == ''] <- NA
 # dev.off()
 # graphics.off()
@@ -1232,7 +1244,7 @@ fig3 <- viz_forest_custom(x = main[, c("mean", "se")],x_trans_function = exp,x_l
                         type = "study_only",
                         table_layout = matrix(c(1,1,1,1,1, 2, 2, 3,3), nrow = 1)) + geom_point()
 
-pdf("20210909_Fig3_with_sample_num.pdf",width=7,height=5)
+pdf(paste(result_dir, "fig3.pdf", sep='/'),width=7,height=5)
 ##w16 H10
 print(fig3)
 dev.off()
