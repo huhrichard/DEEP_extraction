@@ -4,9 +4,9 @@
 
 DEEP uses XGBoost algorithm to identify air toxic combinations associated with health outcomes. The combinations identified using XGBoost were then adjusted for potential confounders to identify early-life multi-air toxic combinations, statistical interactions within combinations. Our approach identified several combinations of air toxics associated with asthma in [Y.C.Li et al.](https://www.jci.org/articles/view/152088). 
 
-Citation:
+Full citation: 
 
-    Li YC, Hsu HL, Chun Y, Chiu PH, Arditi Z, Claudio L, Pandey G, Bunyavanich S. Machine learning-driven identification of early-life air toxic combinations associated with childhood asthma outcomes. J Clin Invest. 2021 Oct 5:e152088. doi: 10.1172/JCI152088. Epub ahead of print. PMID: 34609967.
+Li YC, Hsu HL, Chun Y, Chiu PH, Arditi Z, Claudio L, Pandey G, Bunyavanich S. Machine learning-driven identification of early-life air toxic combinations associated with childhood asthma outcomes. J Clin Invest. 2021 Oct 5:e152088. doi: 10.1172/JCI152088. Epub ahead of print. PMID: 34609967.
 
 ## Required Packages
     
