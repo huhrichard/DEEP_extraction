@@ -566,7 +566,7 @@ def topk_profile_with_its_threshold(sorted_paths, paths_thres, topk, sep="\t"):
     all_greater_path = {}
     for k, (path, count) in enumerate(sorted_paths):
         profile_str = ""
-        if count > 1:
+        if count > 10:
             for idx, pollutant in enumerate(path.split(sep)):
                 # print()
                 profile_str += "{}{}{:.3e}{}".format(sep, pollutant, paths_thres[path][idx], sep)

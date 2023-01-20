@@ -132,7 +132,7 @@ def runWorkflow(**kargs):
 
     fmap_fn = features_to_txt(features)
     scores, list_params, topk_profile_str, sorted_paths, paths_median_threshold, visualize_dict = \
-        analyze_path(X, y, model=model, p_grid=p_grid, feature_set=features, n_trials=5, verbose=False,
+        analyze_path(X, y, model=model, p_grid=p_grid, feature_set=features, n_trials=100, verbose=False,
                      binary_outcome=binary_outcome,
                      fmap_fn=fmap_fn,
                      plot_dir=plotDir,
