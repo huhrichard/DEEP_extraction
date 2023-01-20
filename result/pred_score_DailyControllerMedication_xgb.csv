@@ -1,0 +1,2 @@
+outcome,binary_outcome,mode of min_samples_of_leaf,year from,mean (std) r2 score from random predictors,mean (std) r2 score,mean (std) f score (minority) from random predictors,mean (std) f score (minority),mean (std) f score (majority) from random predictors,mean (std) f score (majority),mean (std) AUC score from random predictors,mean (std) AUC score,num_patients
+DailyControllerMedication,True,0,,nan(nan),nan(nan),3.770e-01(1.338e-01),2.952e-01(1.220e-01),5.802e-01(1.024e-01),6.451e-01(3.825e-02),4.853e-01(9.189e-02),4.889e-01(5.652e-02),149

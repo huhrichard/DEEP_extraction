@@ -101,9 +101,13 @@ def count_paths_with_thres_sign_from_xgb(estimator,
     feature_threshold_count = {}
     boosters = estimator.get_booster().get_dump()
     counted_path = set()
+    """
+    Getting decision paths and signs from XGBoost
+    """
     for b_idx, b0 in enumerate(boosters):
         b0_split_n = b0.replace('\t', '').split('\n')
-        xgb_ft_to_real_ft = {k: v for k, v in zip(estimator.get_booster().feature_names, feature_names)}
+        xgb_ft_to_real_ft = {k: v for k, v in zip(['f{}'.format(i) for i in range(len(feature_names))], 
+                                                    feature_names)}
 
         b0_node_dict = {}
         for bnode in b0_split_n:
@@ -118,7 +122,6 @@ def count_paths_with_thres_sign_from_xgb(estimator,
         with_contradict_sign = np.zeros(shape=n_nodes, dtype=bool)
         paths_in_this_tree = ['' for i in range(n_nodes)]
         paths_threshold_in_this_tree = {}
-
 
         while len(stack) > 0:
             node_id = stack.pop()
@@ -287,7 +290,7 @@ def load_data(input_path=None, input_file=None,
     assert os.path.isfile(input_path), "Invalid input path: {}".format(input_path)
 
     df = pd.read_csv(input_path, header=0, sep=sep)
-    print(df)
+    # print(df)
     # df.drop(columns=['index'], inplace=True)
     df.dropna(axis=0, how='any', inplace=True)
     confounders_df = df[confounding_vars]
@@ -298,7 +301,7 @@ def load_data(input_path=None, input_file=None,
 
     X = dfx.values
     y = df[col_target]
-    print(y.shape)
+    # print(y.shape)
 
     if verbose:
         counts = collections.Counter(y)
@@ -319,11 +322,13 @@ def f_max(y_true, y_pred):
     return np.nanmax(fscores)
 
 
-def f_max_thres(y_true, y_pred, thres=None, minority=True):
+def f_max_thres(y_true, y_pred, thres=None, minority=True,
+                thres_same_cls = False):
+
     y_0 = (y_true == 0).sum()
     y_1 = (y_true == 1).sum()
 
-    if (y_1 > y_0 and minority) or ((not minority) and y_1 < y_0):
+    if ((y_1 > y_0) and minority) or ((not minority) and y_1 < y_0):
         y_true = 1 - y_true
         y_pred = 1 - y_pred
 
@@ -332,8 +337,12 @@ def f_max_thres(y_true, y_pred, thres=None, minority=True):
         fscores = 2 * precision * recall / (precision + recall)
         return np.nanmax(fscores), thres[np.where(fscores == np.nanmax(fscores))][0]
     else:
-        y_pred[y_pred > thres] = 1
-        y_pred[y_pred <= thres] = 0
+        if thres_same_cls:
+            y_pred[y_pred >= thres] = 1
+            y_pred[y_pred < thres] = 0
+        else:
+            y_pred[y_pred > thres] = 1
+            y_pred[y_pred <= thres] = 0
         precision, recall, fmeasure, _ = precision_recall_fscore_support(y_true, y_pred, average='binary')
         return fmeasure
 
@@ -427,7 +436,7 @@ def score_collection(model, binary_outcome, X_train, y_train, X_test, y_test, sc
         _, thres_majority = f_max_thres(y_train, y_pred_train, minority=False)
         y_pred = model.predict_proba(X_test)[:, 1]
         f_minority = f_max_thres(y_test, y_pred, thres=thres_minority)
-        f_majority = f_max_thres(y_test, y_pred, thres=thres_majority, minority=False)
+        f_majority = f_max_thres(y_test, y_pred, thres=1-thres_majority, minority=False)
         scores_list[0].append(f_minority)
         scores_list[1].append(f_majority)
         auc_score = metrics.roc_auc_score(y_test, y_pred)
@@ -461,7 +470,7 @@ def analyze_path(X, y,
     N, Nd = X.shape
 
     if len(feature_set) == 0: feature_set = ['f%s' % i for i in range(Nd)]
-
+    print('Start running stage 1 ...')
     msg = ''
     if verbose:
         msg += "(analyze_path) dim(X): {} | vars (n={}):\n...{}\n".format(X.shape, len(feature_set), feature_set)
@@ -557,7 +566,7 @@ def topk_profile_with_its_threshold(sorted_paths, paths_thres, topk, sep="\t"):
     all_greater_path = {}
     for k, (path, count) in enumerate(sorted_paths):
         profile_str = ""
-        if count > 10:
+        if count > 1:
             for idx, pollutant in enumerate(path.split(sep)):
                 # print()
                 profile_str += "{}{}{:.3e}{}".format(sep, pollutant, paths_thres[path][idx], sep)
@@ -574,7 +583,7 @@ def topk_profile_with_its_threshold(sorted_paths, paths_thres, topk, sep="\t"):
 
 def draw_xgb_tree(test_size, split_idx, tree_dir,
                   visualize_dict, outcome_dir, fmap_fn, booster_idx, labels, X, y):
-    from utils_DEEP import visualize, visualize_xgb
+    from xgb_custom_visualizer import visualize, visualize_xgb
 
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_size,
                                                         random_state=split_idx,
@@ -690,7 +699,7 @@ def statistical_assessment_with_confounder(sorted_paths, feature_idx_dict, paths
                                            outputDir, p_val_df, num_tree_print
                                            ):
     for idx, (profile, profile_occurrence) in enumerate(sorted_paths):
-        if profile_occurrence > 10:
+        if profile_occurrence > 1:
             profile_dict = profile_indicator_function(path=profile,
                                                       feature_idx=feature_idx_dict,
                                                       path_threshold=paths_median_threshold[profile],
@@ -716,7 +725,7 @@ def statistical_assessment_with_confounder(sorted_paths, feature_idx_dict, paths
                 regressor_with_confounders = sm.Logit(y, regression_x_df_drop)
             else:
                 regressor_with_confounders = sm.OLS(y, regression_x_df_drop)
-            result = regressor_with_confounders.fit_regularized(alpha=1e-3)
+            result = regressor_with_confounders.fit_regularized(alpha=1e-3, disp=0)
             profile_coef = result.params.values[0]
             p_val = result.pvalues.values[0]
 
@@ -780,7 +789,7 @@ def statistical_assessment_with_confounder(sorted_paths, feature_idx_dict, paths
                             else:
                                 regressor_with_confounders = sm.OLS(y_cond, regression_p_df_drop)
 
-                            result_p = regressor_with_confounders.fit_regularized(alpha=1e-3)
+                            result_p = regressor_with_confounders.fit_regularized(alpha=1e-3, disp=0)
                             # print(result_p.summary())
 
                             p_val_int = result_p.pvalues.values[0]

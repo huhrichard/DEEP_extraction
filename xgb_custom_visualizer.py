@@ -3,6 +3,9 @@ from os import mkdir
 import os
 import numpy as np
 import pandas as pd
+import matplotlib as mpl
+backend_ =  mpl.get_backend() 
+mpl.use("Agg")
 import matplotlib.pyplot as plt
 from sklearn.tree import export_graphviz
 import six
@@ -103,7 +106,7 @@ def extract_booster_label_to_dict(booster_in_text, x_train, y_train, feature_idx
             key_replace = split_detail
             new_node_rule = split_detail.replace(leaf_string, new_leaf_string)
 
-            print(key_replace)
+            # print(key_replace)
         else:
             yes_feat_with_sign, yes_node = split_dict['yes']
             no_feat_with_sign, no_node = split_dict['no']
@@ -124,18 +127,18 @@ def extract_booster_label_to_dict(booster_in_text, x_train, y_train, feature_idx
 
             b_node_detail[yes_node] = {'x': yes_x, 'y': yes_y,
                                        '#_of_patients': yes_x.shape[0],
-                                       '#_of_positive_patients': sum(yes_y),
-                                       '#_of_negative_patients': yes_x.shape[0] - sum(yes_y),
-                                       # '%_of_positive_patients': '{:.1f}%'.format(sum(yes_y)/yes_x.shape[0]*100),
-                                       # '%_of_negative_patients': '{:.1f}%'.format(100-sum(yes_y) / yes_x.shape[0] * 100)
+                                       '#_of_positive_patients': str(sum(yes_y))+'({:.1f}%)'.format(sum(yes_y)/yes_x.shape[0]*100),
+                                       '#_of_negative_patients': str(yes_x.shape[0] - sum(yes_y)) + '{:.1f}%'.format(100-sum(yes_y) / yes_x.shape[0] * 100),
+                                    #    '%_of_positive_patients': ,
+                                    #    '%_of_negative_patients': 
                                        }
 
             b_node_detail[no_node] = {'x': no_x, 'y': no_y,
                                       '#_of_patients': no_x.shape[0],
-                                      '#_of_positive_patients': sum(no_y),
-                                      '#_of_negative_patients': no_x.shape[0] - sum(no_y),
-                                      # '%_of_positive_patients': '{:.1f}%'.format(sum(no_y) / no_x.shape[0] * 100),
-                                      # '%_of_negative_patients': '{:.1f}%'.format(100 - sum(no_y) / no_x.shape[0] * 100)
+                                      '#_of_positive_patients': str(sum(no_y)) + '{:.1f}%'.format(sum(no_y) / no_x.shape[0] * 100),
+                                      '#_of_negative_patients': str(no_x.shape[0] - sum(no_y)) + '{:.1f}%'.format(100 - sum(no_y) / no_x.shape[0] * 100),
+                                    #   '%_of_positive_patients': ,
+                                    #   '%_of_negative_patients': 
                                       }
             stack.append(yes_node)
             stack.append(no_node)
@@ -245,7 +248,7 @@ def plot_tree_tiff_wrapper(booster, training_data, output_path, outcome_name, fm
     except ImportError:
         raise ImportError('You must install matplotlib to plot tree')
     from io import BytesIO
-
+    plt.ioff()
     if ax is None:
         _, ax = plt.subplots(1, 1)
 
@@ -267,7 +270,7 @@ def visualize_xgb(clf, feature_names, training_data, outcome_name, labels=['0', 
     lNodeParams = {'shape': 'box',
                    'style': 'filled',
                    'fillcolor': '#e48038'}
-
+    plt.ioff()
     fig1, ax1 = plt.subplots(1, 1, figsize=(15, 8))
     output_path = os.path.join(tree_dir, file_name)
     plot_tree_tiff_wrapper(booster=clf, fmap=feature_names, output_path=output_path, num_trees=num_trees, ax=ax1,

@@ -30,16 +30,37 @@ dataDir = os.path.join(os.getcwd(), 'data')  # default unless specified otherwis
 tree_seed = 0
 
 def runWorkflow(**kargs):
-    verbose = kargs.get('verbose', True)
+    verbose = kargs.get('verbose', False)
     input_file = kargs.get('input_file', '')
     binary_outcome = kargs.get('binary_outcome', True)
     outcome_folder_name = kargs.get('output_folder_name', '')
-    p_val_df = kargs.get('p_val_df', pd.DataFrame({}))
-    test_score_df = kargs.get('test_score_df', pd.DataFrame({}))
+    # p_val_df = kargs.get('p_val_df', pd.DataFrame({}))
+    # test_score_df = kargs.get('test_score_df', pd.DataFrame({}))
     # yr_name = kargs.get('yr_name', '')
-    xgb = kargs.get('xgb', False)
+    confounding_vars = kargs.get('confounding_vars', [])
+    irrelevant_vars = kargs.get('irrelevant_vars', [])
+    xgb = kargs.get('xgb', True)
     num_tree_print = kargs.get('num_tree_print', -1)
     # outcome_name = kargs.get('outcome_name', pd.DataFrame({}))
+
+    p_val_df = pd.DataFrame(columns=['profile', 'outcome', 'p_val', 'relation',
+                                    'coef', 'coef_95CI_lower', 'coef_95CI_upper', 'freq', 'pos_count', 'neg_count',
+                                    'binary_outcome',
+                                    # 'max_count',
+                                    'interaction_p_vals', 'interactions_combs', 'identical_profiles_pollutants'
+                                    ])
+    test_score_df = pd.DataFrame(columns=['outcome', 'binary_outcome', 'mode of min_samples_of_leaf', 'year from',
+                                        'mean (std) r2 score from random predictors',
+                                        'mean (std) r2 score',
+                                        'mean (std) f score (minority) from random predictors',
+                                        'mean (std) f score (minority)',
+                                        'mean (std) f score (majority) from random predictors',
+                                        'mean (std) f score (majority)',
+                                        'mean (std) AUC score from random predictors',
+                                        'mean (std) AUC score',
+                                        'num_patients'
+                                        ])
+
 
     outputDir = os.path.join(plotDir, outcome_folder_name)
     if not os.path.exists(outputDir):
@@ -55,17 +76,17 @@ def runWorkflow(**kargs):
     ######################################################
     file_prefix = input_file.split('.')[0]
 
-    confounding_vars = ['age', 'avg_income',
-                        'race/ethnicity_Asian',
-                        'race/ethnicity_Black or African American',
-                        'race/ethnicity_Hispanic or Latino',
-                        'race/ethnicity_More Than One Race',
-                        'race/ethnicity_Unknown / Not Reported',
-                        'race/ethnicity_White',
-                        'gender',
-                        ]
+    # confounding_vars = ['age', 'avg_income',
+    #                     'race/ethnicity_Asian',
+    #                     'race/ethnicity_Black or African American',
+    #                     'race/ethnicity_Hispanic or Latino',
+    #                     'race/ethnicity_More Than One Race',
+    #                     'race/ethnicity_Unknown / Not Reported',
+    #                     'race/ethnicity_White',
+    #                     'gender',
+    #                     ]
 
-    exclude_vars = confounding_vars + ["ID"]
+    exclude_vars = confounding_vars + irrelevant_vars
 
     """
     Load Data
@@ -81,6 +102,9 @@ def runWorkflow(**kargs):
     # 2. define model (e.g. decision tree)
     if verbose: print("(runWorkflow) 2. Define model (e.g. decision tree and its parameters) ...")
     ######################################################
+    """
+    Only for DecisionTreeClassifier(), not for XGBClassifier()
+    """
     p_grid = {"min_samples_leaf": []}
 
     if xgb:
@@ -108,7 +132,7 @@ def runWorkflow(**kargs):
 
     fmap_fn = features_to_txt(features)
     scores, list_params, topk_profile_str, sorted_paths, paths_median_threshold, visualize_dict = \
-        analyze_path(X, y, model=model, p_grid=p_grid, feature_set=features, n_trials=100, verbose=False,
+        analyze_path(X, y, model=model, p_grid=p_grid, feature_set=features, n_trials=5, verbose=False,
                      binary_outcome=binary_outcome,
                      fmap_fn=fmap_fn,
                      plot_dir=plotDir,
@@ -218,30 +242,24 @@ if __name__ == "__main__":
     binary_out = args.binary_outcome
 
     plotDir = plot_predir
-    pvalue_df = pd.DataFrame(columns=['profile', 'outcome', 'p_val', 'relation',
-                                      'coef', 'coef_95CI_lower', 'coef_95CI_upper', 'freq', 'pos_count', 'neg_count',
-                                      'binary_outcome',
-                                      # 'max_count',
-                                      'interaction_p_vals', 'interactions_combs', 'identical_profiles_pollutants'
-                                      ])
-    pred_score_df = pd.DataFrame(columns=['outcome', 'binary_outcome', 'mode of min_samples_of_leaf', 'year from',
-                                          'mean (std) r2 score from random predictors',
-                                          'mean (std) r2 score',
-                                          'mean (std) f score (minority) from random predictors',
-                                          'mean (std) f score (minority)',
-                                          'mean (std) f score (majority) from random predictors',
-                                          'mean (std) f score (majority)',
-                                          'mean (std) AUC score from random predictors',
-                                          'mean (std) AUC score',
-                                          'num_patients'
-                                          ])
+    confounding_vars = ['age', 'avg_income',
+                    'race/ethnicity_Asian',
+                    'race/ethnicity_Black or African American',
+                    'race/ethnicity_Hispanic or Latino',
+                    'race/ethnicity_More Than One Race',
+                    'race/ethnicity_Unknown / Not Reported',
+                    'race/ethnicity_White',
+                    'gender',
+                    ]
+
+    irrelevant_vars = ["ID"]
 
     file = args.filename
     pvalue_df, pred_score_df = runWorkflow(input_file=file,
                                            binary_outcome=binary_out,
                                            output_folder_name=outcome,
-                                           p_val_df=pvalue_df,
-                                           test_score_df=pred_score_df,
+                                           confounding_vars=confounding_vars,
+                                           irrelevant_vars=irrelevant_vars,
                                            xgb=xgb_predict,
                                            num_tree_print=ntp
                                            )

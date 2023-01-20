@@ -1,0 +1,4 @@
+outcome,binary_outcome,mode of min_samples_of_leaf,year from,mean (std) r2 score from random predictors,mean (std) r2 score,mean (std) f score (minority) from random predictors,mean (std) f score (minority),mean (std) f score (majority) from random predictors,mean (std) f score (majority),mean (std) AUC score from random predictors,mean (std) AUC score,num_patients
+DailyControllerMedication,True,0,,nan(nan),nan(nan),3.770e-01(1.338e-01),2.952e-01(1.220e-01),5.802e-01(1.024e-01),6.451e-01(3.825e-02),4.853e-01(9.189e-02),4.889e-01(5.652e-02),149
+OvernightHospitalization,True,0,,nan(nan),nan(nan),2.593e-01(1.386e-01),1.834e-01(1.210e-01),7.361e-01(6.382e-02),7.248e-01(6.013e-02),5.044e-01(8.312e-02),4.662e-01(6.959e-02),151
+EmergencyRoomVisit,True,0,,nan(nan),nan(nan),2.661e-01(1.269e-01),1.457e-01(1.384e-01),7.807e-01(4.507e-02),7.637e-01(5.219e-02),5.220e-01(7.410e-02),4.668e-01(7.405e-02),151
